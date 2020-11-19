@@ -112,11 +112,11 @@ function scatterbuild(chosenX, chosenY) {
     // Create x and y scale functions
 
     var xLinearScale = d3.scaleLinear()
-       .domain([d3.min(StatesData, d => d[chosenX]) * 0.75, d3.max(StatesData, d => d[chosenX]) * 1.1])
+       .domain([d3.min(StatesData, d => d[chosenX]) * 0.90, d3.max(StatesData, d => d[chosenX]) * 1.10])
        .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-       .domain([d3.min(StatesData, d => d[chosenY]) * 0.75, d3.max(StatesData, d => d[chosenY]) * 1.1])
+       .domain([d3.min(StatesData, d => d[chosenY]) * 0.90, d3.max(StatesData, d => d[chosenY]) * 1.10])
        .range([height, 0]);
 
        // Create Axis functions
