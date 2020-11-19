@@ -1,4 +1,4 @@
-// Build chart
+// Build a chart
 var svgWidth = 980;
 var svgHeight = 620;
 

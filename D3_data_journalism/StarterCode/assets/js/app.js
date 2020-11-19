@@ -1,31 +1,31 @@
 // @TODO: YOUR CODE HERE!
 // Build a chart
-var svgWidth = 960
-var svgHeight = 500
+var svgWidth = 980;
+var svgHeight = 620;
 
 var margin = {
   top: 20,
-  right: 40,
-  bottom: 60,
+  right: 10,
+  bottom: 100,
   left: 100
 }
 
-var width = svgWidth - margin.left - margin.right
-var height = svgHeight - margin.top - margin.bottom
+var width = svgWidth - margin.left - margin.right;
+var height = svgHeight - margin.top - margin.bottom;
 
 // Create an SVG wrapper, append an SVG group which will hold our chart
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
-  .attr("height", svgHeight)
+  .attr("height", svgHeight);
 
 var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`).classed("chart", true)
+  .attr("transform", `translate(${margin.left}, ${margin.top})`).classed("chart", true);
 
 // Import our data
-d3.csv("assets/data/data.csv").then(function(data) {
+d3.csv("assets/data/data.csv").then(function(StatesData) {
     // Parse data
-    data.forEach(function(item) {
+    StatesData.forEach(function(item) {
         item.age = +item.age
         item.healthcare = +item.healthcare
         item.obesity = +item.obesity
@@ -35,19 +35,19 @@ d3.csv("assets/data/data.csv").then(function(data) {
     })
 
     // Create x and y scale functions
-    var xScale = d3.scaleLinear()
-        .domain([8, d3.max(data, d => d.poverty)])
+    var xLinearScale = d3.scaleLinear()
+        .domain([8, d3.max(StatesData, d => d.poverty)])
         .range([0, width])
-        .nice() 
+        .nice();
     
-    var yScale = d3.scaleLinear()
-        .domain([4, d3.max(data, d => d.healthcare)])
+    var yLinearScale = d3.scaleLinear()
+        .domain([4, d3.max(StatesData, d => d.healthcare)])
         .range([height, 0])
-        .nice()
+        .nice();
     
     // Create an  Axis functions
-    var bottomAxis = d3.axisBottom(xScale)
-    var leftAxis = d3.axisLeft(yScale)
+    var bottomAxis = d3.axisBottom(xLinearScale);
+    var leftAxis = d3.axisLeft(yLinearScale);
 
     // Append Axes 
     chartGroup.append("g")
@@ -59,24 +59,24 @@ d3.csv("assets/data/data.csv").then(function(data) {
 
     // Create circles
     var circlesGroup = chartGroup.selectAll("circle")
-        .data(data)
+        .data(StatesData)
         .enter()
         .append("circle")
         .classed("stateCircle", true)
-        .attr("cx", d => xScale(d.poverty))
-        .attr("cy", d => yScale(d.healthcare))
+        .attr("cx", d => xLinearScale(d.poverty))
+        .attr("cy", d => yLinearScale(d.healthcare))
         .attr("r", "15")
     
     // Add state  to circles
     chartGroup.append("g")
         .selectAll('text')
-        .data(data)
+        .data(StatesData)
         .enter()
         .append("text")
         .classed("stateText", true)
         .text(d=>d.abbr)
-        .attr("x", d=>xScale(d.poverty))
-        .attr("y", d=>yScale(d.healthcare))
+        .attr("x", d=>xLinearScale(d.poverty))
+        .attr("y", d=>yLinearScale(d.healthcare))
         .attr("alignment-baseline", "central")
 
     // Initialize Tool-tip
@@ -87,8 +87,8 @@ d3.csv("assets/data/data.csv").then(function(data) {
         return (`${d.state}<br>In Poverty: ${d.poverty}%<br>Lacks Healthcare: ${d.healthcare}%`)
       })
 
-    // Create Tool-tip in the chart
-    chartGroup.call(toolTip)
+    // Create Tooltip in the chart
+    chartGroup.call(toolTip);
 
     // Create Event Listeners to display 
     circlesGroup.on("mouseover", function(circle) {
